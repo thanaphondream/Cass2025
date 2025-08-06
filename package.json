@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-     "build": "next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "src": "package.json",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/leaflet": "^1.9.20",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
