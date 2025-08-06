@@ -51,47 +51,53 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await fetch("http://10.90.1.118:3001/api/locationget");
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        
-        const jsondata: LocationData[] = await response.json();
-        setLocationdata(jsondata);
+   const fetchData = async () => {
+  try {
+    setLoading(true);
+    setError(null);
+    const response = await fetch("https://cass-api-data.vercel.app/api/locationget");
 
-        // ประมวลผลข้อมูลล่าสุด
-        const withLatest: LatestLocation[] = jsondata
-          .map((loc) => {
-            const latest = [...loc.meteorological_id].sort((a, b) => {
-              const dateA = new Date(`${a.date}T${String(a.hours).padStart(2, '0')}:00:00`);
-              const dateB = new Date(`${b.date}T${String(b.hours).padStart(2, '0')}:00:00`);
-              return dateB.getTime() - dateA.getTime();
-            })[0];
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
 
-            return {
-              name: loc.name_location,
-              latitude: loc.latitude,
-              longitude: loc.longitude,
-              latestData: latest,
-            };
-          })
-          .filter((loc) => loc.latestData)
-          .sort((a, b) => new Date(b.latestData.date).getTime() - new Date(a.latestData.date).getTime())
-          .slice(0, 4);
+    const jsondata = await response.json();
+    console.log("Raw API response:", jsondata);
 
-        setLatestLocations(withLatest);
-      } catch (err: any) {
-        console.error("Error fetching location data:", err);
-        setError("ไม่สามารถโหลดข้อมูลได้ โปรดลองอีกครั้งในภายหลัง");
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!Array.isArray(jsondata.Location_find)) {
+      throw new Error("API response.Location_find is not an array");
+    }
+
+    setLocationdata(jsondata.Location_find);
+
+    const withLatest: LatestLocation[] = jsondata.Location_find
+      .map((loc: any) => {
+        const latest = [...loc.meteorological_id].sort((a, b) => {
+          const dateA = new Date(`${a.date}T${String(a.hours).padStart(2, '0')}:00:00`);
+          const dateB = new Date(`${b.date}T${String(b.hours).padStart(2, '0')}:00:00`);
+          return dateB.getTime() - dateA.getTime();
+        })[0];
+
+        return {
+          name: loc.name_location,
+          latitude: loc.latitude,
+          longitude: loc.longitude,
+          latestData: latest,
+        };
+      })
+      .filter((loc: any) => loc.latestData)
+      .sort((a:any, b:any) => new Date(b.latestData.date).getTime() - new Date(a.latestData.date).getTime())
+      .slice(0, 4);
+
+    setLatestLocations(withLatest);
+
+  } catch (err: any) {
+    console.error("Error fetching location data:", err);
+    setError("ไม่สามารถโหลดข้อมูลได้ โปรดลองอีกครั้งในภายหลัง");
+  } finally {
+    setLoading(false);
+  }
+};
 
     fetchData();
   }, []);
@@ -126,7 +132,7 @@ export default function HomePage() {
         </Link>
       </div>
       <h1 className="text-3xl md:text-4xl font-extrabold mb-8 text-center text-blue-700 animate-fade-in-down">
-        🌧️ ค่าปริมาณฝนและข้อมูลอากาศในแต่ละสถานี 🌧️
+        ค่าพยากรอากาศในแต่ละสถานี 
       </h1>
 
       <div className="mb-12 h-96 rounded-lg overflow-hidden shadow-lg">

@@ -88,7 +88,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       pathname === "/dashboard-layout/Download" ? "text-blue-400 font-semibold" : ""
                     }`}
                   >
-                    ข้อมูลปริมาณน้ำฝน
+                   ค่าพยากรอากาศ
                   </Link>
 
                   <button

@@ -257,7 +257,7 @@ const No2_ = () => {
                 id="location-select"
                 className="w-full px-5 py-3 border border-gray-300 rounded-lg shadow-sm
                                 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
-                                text-lg text-gray-700 bg-white appearance-none pr-10
+                                text-lg text-gray-700 bg-white appearance-none pr-
                                 hover:border-gray-400 transition-colors duration-200"
                 disabled
               >

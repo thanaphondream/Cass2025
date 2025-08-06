@@ -7,7 +7,6 @@ export default function AuthRedirect() {
   const router = useRouter();
 
   useEffect(() => {
-    // หน่วงเวลาเล็กน้อยเพื่อให้ UX ลื่นไหล
     const timeout = setTimeout(() => {
       router.replace("/dashboard-layout/Home");
     }, 100);

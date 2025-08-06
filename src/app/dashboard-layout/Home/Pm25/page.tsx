@@ -49,7 +49,7 @@ const page = () => {
     useEffect(() => {
         const datasowrs = async () => {
             try{
-                const rs = await fetch("http://10.90.1.118:3001/api/pmshownow")
+                const rs = await fetch("https://cass-api-data.vercel.app/api/pmshownow")
                 const rs_json = await rs.json()
                 setPmnom(rs_json)
             }catch(err){
