@@ -1,3 +1,4 @@
+// src/app/dashboard-layout/LeafletMap/LeafletMap.tsx
 "use client";
 
 import React from "react";
@@ -32,9 +33,9 @@ interface LocationData {
 }
 
 const RAIN_COLORS = {
-  HIGH: "#ff0000", // ฝนมาก > 50 มม. แดง
-  MEDIUM: "#ffff00", // ฝนปานกลาง 20-50 มม. เหลือง
-  LOW: "#00ff00", // ฝนน้อย < 20 มม. เขียว
+  HIGH: "#ff0000",
+  MEDIUM: "#ffff00",
+  LOW: "#00ff00",
 };
 
 const getRainColor = (rainValue: number) => {
@@ -63,7 +64,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ locationdata }) => {
   }
 
   return (
-    <MapContainer center={[15, 100]} zoom={5} style={{ height: "100%", width: "100%" }} attributionControl={false}>
+    <MapContainer center={[15, 100]} zoom={5} style={{ height: "100vh", width: "100%" }} attributionControl={false}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {locationdata.map((location) => {
         if (!location.meteorological_id.length) return null;
