@@ -3,9 +3,43 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { LocationData } from '../Home/page';
+// import { locationdata } from '../Home/page';
 
-// กำหนดสีสำหรับปริมาณฝน
+interface MeteorologicalData {
+  id: number;
+  year: number;
+  month: number;
+  day: number;
+  hours: number;
+  temperature: number; 
+  humidity: number;
+  slp: number;
+  rain: number;
+  windspeed10m: number;
+  winddirection10m: number; 
+  lowcloud: number;
+  highcloud: number;
+  date: string;
+}
+
+interface LocationData {
+  id: number;
+  name_location: string;
+  latitude: number;
+  longitude: number;
+  date: string;
+  meteorological_id: MeteorologicalData[];
+}
+
+interface LatestLocation {
+  name: string;
+  latitude: number;
+  longitude: number;
+  latestData: MeteorologicalData;
+}
+
+
+
 const RAIN_COLORS = {
   HIGH: '#ff0000',    // สีแดงสำหรับฝนมาก (>50 มม.)
   MEDIUM: '#ffff00',  // สีเหลืองสำหรับฝนปานกลาง (20-50 มม.)
@@ -42,7 +76,6 @@ export default function LeafletMap({ locationdata }: { locationdata: LocationDat
       />
       
       {locationdata.map((location) => {
-        // หาข้อมูลล่าสุดของสถานีนี้
         const latestData = location.meteorological_id.length > 0 
           ? [...location.meteorological_id].sort((a, b) => {
               const dateA = new Date(`${a.date}T${String(a.hours).padStart(2, '0')}:00:00`);
