@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -31,9 +32,9 @@ interface LocationData {
 }
 
 const RAIN_COLORS = {
-  HIGH: "#ff0000", // แดง ฝนมาก >50
-  MEDIUM: "#ffff00", // เหลือง 20-50
-  LOW: "#00ff00", // เขียว <20
+  HIGH: "#ff0000", // ฝนมาก > 50 มม. แดง
+  MEDIUM: "#ffff00", // ฝนปานกลาง 20-50 มม. เหลือง
+  LOW: "#00ff00", // ฝนน้อย < 20 มม. เขียว
 };
 
 const getRainColor = (rainValue: number) => {
@@ -42,8 +43,8 @@ const getRainColor = (rainValue: number) => {
   return RAIN_COLORS.LOW;
 };
 
-const createCustomIcon = (color: string) => {
-  return new L.Icon({
+const createCustomIcon = (color: string) =>
+  new L.Icon({
     iconUrl: `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='${encodeURIComponent(
       color
     )}'><path d='M16 2C9.37 2 4 7.37 4 14c0 8.45 12 16 12 16s12-7.55 12-16c0-6.63-5.37-12-12-12z'/></svg>`,
@@ -51,16 +52,22 @@ const createCustomIcon = (color: string) => {
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
   });
-};
 
-export default function LeafletMap({ locationdata }: { locationdata: LocationData[] }) {
+interface LeafletMapProps {
+  locationdata: LocationData[];
+}
+
+const LeafletMap: React.FC<LeafletMapProps> = ({ locationdata }) => {
+  if (!locationdata || locationdata.length === 0) {
+    return <p>ไม่มีข้อมูลแสดงแผนที่</p>;
+  }
+
   return (
     <MapContainer center={[15, 100]} zoom={5} style={{ height: "100%", width: "100%" }} attributionControl={false}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {locationdata.map((location) => {
         if (!location.meteorological_id.length) return null;
 
-        // หา latest meteorological data โดยดูวันที่และชั่วโมง
         const latestData = [...location.meteorological_id].sort((a, b) => {
           const dateA = new Date(`${a.date}T${String(a.hours).padStart(2, "0")}:00:00`);
           const dateB = new Date(`${b.date}T${String(b.hours).padStart(2, "0")}:00:00`);
@@ -76,8 +83,8 @@ export default function LeafletMap({ locationdata }: { locationdata: LocationDat
               <div className="space-y-1">
                 <h3 className="font-bold text-lg">{location.name_location}</h3>
                 <p className="text-sm text-gray-600">
-                  อัปเดต: {new Date(latestData.date).toLocaleDateString("th-TH")} {String(latestData.hours).padStart(2, "0")}
-                  :00 น.
+                  อัปเดต: {new Date(latestData.date).toLocaleDateString("th-TH")}{" "}
+                  {String(latestData.hours).padStart(2, "0")}:00 น.
                 </p>
                 <div className="grid grid-cols-2 gap-1 mt-2">
                   <div className="font-medium">อุณหภูมิ:</div>
@@ -98,4 +105,6 @@ export default function LeafletMap({ locationdata }: { locationdata: LocationDat
       })}
     </MapContainer>
   );
-}
+};
+
+export default LeafletMap;
