@@ -1,11 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async rewrites() {
-    return [
-      { source: '/old-route', destination: '/new-route' }
-    ];
-  },
+  distDir: 'build',   // <-- ต้องเป็น string เท่านั้น
   // config อื่น ๆ
-}
+};
 
 module.exports = nextConfig;

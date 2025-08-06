@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "src": "next.config.js",
-    "use": "@vercel/next"
+    "src": "package.json",
+    "use": "@vercel/static-build",
+    "config": { "distDir": "build" }
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
